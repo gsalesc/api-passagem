@@ -1,0 +1,41 @@
+
+<div th:insert="assets/origemDestinoEstilo"></div>
+<div class="pesquisaViagens">
+    <div class="row-content">
+        <div class="origem-destino">
+            <div class="origem">
+                <h3>Origem</h3>
+                <!-- <input list="browsers" name="browser" class="texto-origem">-->
+                <input type="text" class="texto-origem" placeholder="Insira a origem">
+                <button type="button" class="botao-buscar">Pesquisar</button>
+            </div> 
+            <div class="destino">
+                <h3>Destino</h3>
+                <input type="text" class="texto-destino" placeholder="Insira o destino"> 
+                <button type="button" class="botao-buscar" >Pesquisar</button>
+            </div>
+        </div>
+    </div>
+    <div class="row-content">
+        <div class="opcoesViagem">
+            <div class="opcoes-content">
+                <div class="opcoes-content-column">
+                    <label for="data-part"><h4>Partida</h4></label>
+                    <input type="date" class="data-partida" id="data-part">
+                </div>
+
+                <div class="opcoes-content-column">
+                    <label for="qtd-pass"><h4>Passageiros</h4></label>
+                    <input type="text" class="data-partida" id="qtd-pass">
+                </div>
+                    <div class="opcoes-content-column">
+                    <button type="submit" class="botao-buscar">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul th:each="aeroporto: ${aeroportos}">
+		<li th:text="${aeroporto.nome}"></li>
+</ul>
