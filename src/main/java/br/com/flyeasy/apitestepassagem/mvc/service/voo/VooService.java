@@ -53,24 +53,28 @@ public class VooService {
 		validarVoo.forEach(validarVoo -> validarVoo.validar(dados));
 		
 		Voo novo = new Voo(dados, aeroportoOrigem, aeroportoDestino);
-		
+				
 		if(dados.getVoos_id().size() > 0) {
 			for(Long id : dados.getVoos_id()) {
-				novo.adicionarConexao(vooRepository.findById(id).get());
-			}
-		}
-				
-		if(novo.getConexoes().size() > 0) {
-			novo.atualizarTempoEstimado();	
-		} else {
-			novo.carregarPoltronas(poltronaRepository);
+				if(vooRepository.existsById(id)) {
+					Voo conexao = vooRepository.findById(id).get();
+					novo.adicionarConexao(conexao);
+					novo.atualizarTempoEstimado(conexao);
+				}
+			}			
 		}
 		
 		vooRepository.save(novo);
 		
+		if(novo.getConexoes().size() == 0) {
+			novo.carregarPoltronas(poltronaRepository);
+		} 
+		
+		vooRepository.save(novo);
+
+		
 		return novo;
 	}
-	
 	
 	public void atualizarVoo(@Valid VooAtualizarDTO dados) {
 		//validação de integridade

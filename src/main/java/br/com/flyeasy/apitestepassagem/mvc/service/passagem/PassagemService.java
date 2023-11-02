@@ -1,5 +1,7 @@
 package br.com.flyeasy.apitestepassagem.mvc.service.passagem;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,8 @@ import br.com.flyeasy.apitestepassagem.mvc.repository.passageiro.PassageiroRepos
 import br.com.flyeasy.apitestepassagem.mvc.repository.passagem.PassagemRepository;
 import br.com.flyeasy.apitestepassagem.mvc.repository.poltrona.PoltronaRepository;
 import br.com.flyeasy.apitestepassagem.mvc.repository.voo.VooRepository;
+import br.com.flyeasy.apitestepassagem.mvc.service.passagem.validations.ValidarPassagem;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Service
@@ -32,6 +36,10 @@ public class PassagemService {
 	@Autowired
 	private PassageiroRepository passageiroRepository;
 	
+	@Autowired
+	private List<ValidarPassagem> validaPassagem;
+	
+	@Transactional(rollbackOn = Exception.class)
 	public Passagem inserir(@Valid PassagemCadastroDTO dados) {
 		
 		if(!vooRepository.existsById(dados.getVoo_id())) {
@@ -41,15 +49,23 @@ public class PassagemService {
 		if(!poltronaRepository.existsById(dados.getPoltrona_id())) {
 			throw new ValidacaoException("Não há uma poltrona com esse id");
 		}
-		
-		if(!passageiroRepository.existsById(dados.getPassageiro_id())) {
-			throw new ValidacaoException("Não há um passageiro com esse id");
-		}
+				
+		validaPassagem.forEach(valida -> valida.validar(dados));
 		
 		Voo voo = vooRepository.findById(dados.getVoo_id()).get();
 		Poltrona poltrona = poltronaRepository.findById(dados.getPoltrona_id()).get();
-		Passageiro passageiro = passageiroRepository.findById(dados.getPassageiro_id()).get();
-		Passagem novo = new Passagem(dados, voo, poltrona, passageiro);
+		
+		Passageiro passageiro = new Passageiro(dados.getPassageiro_id());
+		passageiro.atribuirVooEPoltrona(voo, poltrona);
+		
+		Passageiro passageiroVoo = this.passageiroRepository.save(passageiro);
+		voo.inserirPassageiro(passageiroVoo);
+		
+		poltrona.adicionarPassageiro(passageiroVoo);
+		poltrona.alterarStatusOcupado();
+		Poltrona poltronaVoo = poltronaRepository.save(poltrona);
+		
+		Passagem novo = new Passagem(voo, poltronaVoo, passageiroVoo);
 		passagemRepository.save(novo); 
 		
 		return novo;
@@ -57,5 +73,9 @@ public class PassagemService {
 	
 	public Page<Passagem> listar(Pageable page){
 		return passagemRepository.findAll(page);
+	}
+
+	public Passagem listarPorId(Long id) {
+		return this.passagemRepository.findById(id).get();
 	}
 }

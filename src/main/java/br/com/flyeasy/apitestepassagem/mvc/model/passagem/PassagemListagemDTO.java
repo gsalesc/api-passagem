@@ -12,7 +12,7 @@ public class PassagemListagemDTO {
 	
 	private String poltrona;
 	
-	private String passageiro;
+	private Long passageiro;
 	
 	private BigDecimal preco;
 	
@@ -24,7 +24,7 @@ public class PassagemListagemDTO {
 		id = passagem.getId();
 		voo = passagem.getVoo().getId();
 		poltrona = passagem.getPoltrona().getSigla();
-		passageiro = passagem.getPassageiro().getCPF();
+		passageiro = passagem.getPassageiro().getId();
 		preco = passagem.getPreco();
 	}
 
@@ -40,7 +40,7 @@ public class PassagemListagemDTO {
 		return poltrona;
 	}
 
-	public String getPassageiro() {
+	public Long getPassageiro() {
 		return passageiro;
 	}
 

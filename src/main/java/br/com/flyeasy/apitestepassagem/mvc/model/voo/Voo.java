@@ -13,6 +13,7 @@ import br.com.flyeasy.apitestepassagem.mvc.model.aeroporto.Aeroporto;
 import br.com.flyeasy.apitestepassagem.mvc.model.passageiro.Passageiro;
 import br.com.flyeasy.apitestepassagem.mvc.model.poltrona.Classe;
 import br.com.flyeasy.apitestepassagem.mvc.model.poltrona.Poltrona;
+import br.com.flyeasy.apitestepassagem.mvc.model.usuario.DadosLoginDTO;
 import br.com.flyeasy.apitestepassagem.mvc.model.voo.dto.VooAtualizarDTO;
 import br.com.flyeasy.apitestepassagem.mvc.model.voo.dto.VooCadastroDTO;
 import br.com.flyeasy.apitestepassagem.mvc.repository.poltrona.PoltronaRepository;
@@ -96,10 +97,13 @@ public class Voo {
 		poltronas = new ArrayList<Poltrona>(this.qtdPoltronas);
 		passageiros = new ArrayList<Passageiro>();
 		
-		if(this.getConexoes().size() == 0) {this.tempoEstimado = new BigDecimal(dados.getTempoEstimado());}
+		
+		if(dados.getVoos_id().size() == 0) {this.tempoEstimado = new BigDecimal(dados.getTempoEstimado());}
 		else {
 			this.tempoEstimado = BigDecimal.ZERO;
 		}
+		
+		this.status = StatusVoo.AGENDADO;
 	}
 	
 	public void atualizar(@Valid VooAtualizarDTO dados, Aeroporto origem, Aeroporto destino) {
@@ -144,6 +148,12 @@ public class Voo {
 		}
 	}
 
+	public void atualizarTempoEstimado(Voo conexao) {
+		//imutável
+		BigDecimal novo = this.tempoEstimado.add(conexao.getTempoEstimado());
+		this.tempoEstimado = novo;
+	}
+	
 	public void carregarPoltronas(PoltronaRepository poltronaRepository) {
 		if(this.qtdConexoes == 0) {
 		int qtdExecutiva = (this.qtdPoltronas * 30) / 100;

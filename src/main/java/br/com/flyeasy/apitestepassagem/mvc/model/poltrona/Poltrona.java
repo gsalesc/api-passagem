@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.flyeasy.apitestepassagem.mvc.model.passageiro.Passageiro;
 import br.com.flyeasy.apitestepassagem.mvc.model.voo.Voo;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,7 +31,7 @@ public class Poltrona {
 	@JsonIgnore
 	private Passageiro passageiro;
 	
-	@Enumerated
+	@Enumerated()
 	private Classe classe;
 	
 	@Enumerated
@@ -84,5 +84,7 @@ public class Poltrona {
 		return situacao;
 	}
 
-
+	public void atribuirVoo(Voo voo) {
+		this.voo = voo;
+	}
 }
