@@ -36,8 +36,8 @@ CREATE TABLE aeroporto (
 CREATE TABLE poltrona (
 	id INT NOT NULL PRIMARY KEY,
     sigla VARCHAR(5) NOT NULL,
-    situacao INT NOT NULL,
-    classe INT NOT NULL,
+    situacao INT,
+    classe INT,
     voo_id INT NOT NULL,
     passageiro_id INT NOT NULL
     
@@ -45,7 +45,7 @@ CREATE TABLE poltrona (
     CONSTRAINT FK_poltrona_passageiro_id FOREIGN KEY (passageiro_id) REFERENCES passageiro(id)*/
 );
 
-CREATE TABLE passagem (
+/*CREATE TABLE passagem (
 	id INT NOT NULL PRIMARY KEY,
     voo_id INT NOT NULL,
     poltrona_id INT NOT NULL,
@@ -56,4 +56,4 @@ CREATE TABLE passagem (
 	/*CONSTRAINT FK_passagem_voo_id FOREIGN KEY (voo_id) REFERENCES voo(id),
     CONSTRAINT FK_passagem_poltrona_id FOREIGN KEY (poltrona_id) REFERENCES poltrona(id),
     CONSTRAINT FK_passagem_passageiro_id FOREIGN KEY (passageiro_id) REFERENCES passageiro(id)*/
-);
+);*/

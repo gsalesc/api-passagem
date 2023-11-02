@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.flyeasy.apitestepassagem.mvc.model.poltrona.Poltrona;
 import br.com.flyeasy.apitestepassagem.mvc.model.voo.Voo;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,10 +26,12 @@ public class Passageiro {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
+	@Column(unique = true)
 	private String CPF;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataNascimento;
 	private String telefone;
+	@Column(unique = true)
 	private String email;
 	@ManyToOne
 	@JsonIgnore
@@ -56,7 +59,7 @@ public class Passageiro {
 		this.voo = voo;
 		this.poltrona = poltrona;
 	}
-	
+		
 	public Long getId() {
 		return id;
 	}
@@ -82,5 +85,10 @@ public class Passageiro {
 
 	public Poltrona getPoltrona() {
 		return poltrona;
+	}
+
+	public void atribuirVooEPoltrona(Voo voo2, Poltrona poltrona2) {
+		this.voo = voo2;
+		this.poltrona = poltrona2;	
 	}
 }

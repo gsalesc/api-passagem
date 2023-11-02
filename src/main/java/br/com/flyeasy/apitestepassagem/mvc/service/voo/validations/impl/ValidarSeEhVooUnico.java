@@ -21,9 +21,8 @@ public class ValidarSeEhVooUnico implements ValidarVoo {
 				Voo conexao = vooRepository.findById(dados.getVoos_id().get(i)).get();
 				
 				if(conexao.getConexoes().size() > 0){
-					throw new ValidacaoException("Uma conexão não deve ser um vôo único");
+					throw new ValidacaoException("Uma conexão deve ser um vôo único");
 				}
-
 			}
 		}
 	}

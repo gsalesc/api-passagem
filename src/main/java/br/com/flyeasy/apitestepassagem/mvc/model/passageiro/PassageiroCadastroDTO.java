@@ -19,11 +19,19 @@ public class PassageiroCadastroDTO {
 	private String telefone;
 	@NotNull
 	private String email;
-	@NotNull 
-	private Long voo_id;
-	@NotNull 
-	private Long poltrona_id;
 	
+	public PassageiroCadastroDTO() {
+	}
+	
+	public PassageiroCadastroDTO(@NotNull String nome, @NotNull String cpf, @NotNull LocalDate dataNascimento,
+			@NotNull String telefone, @NotNull String email) {
+		this.nome = nome;
+		this.cpf = cpf;
+		this.dataNascimento = dataNascimento;
+		this.telefone = telefone;
+		this.email = email;
+
+	}
 	public String getNome() {
 		return nome;
 	}
@@ -38,11 +46,5 @@ public class PassageiroCadastroDTO {
 	}
 	public String getEmail() {
 		return email;
-	}
-	public Long getVoo_id() {
-		return voo_id;
-	}
-	public Long getPoltrona_id() {
-		return poltrona_id;
 	}
 }
